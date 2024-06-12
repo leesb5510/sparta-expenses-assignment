@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Detail from "./pages/Detail/Detail";
 import Home from "./pages/Home/Home";
+import SignUp from "./pages/SignUp/SignUp";
+import SignIn from "./pages/SignIn/SignIn";
 
 function App() {
   const [expenses, setExpenses] = useState([
@@ -43,6 +45,8 @@ function App() {
           path="/detail/:id"
           element={<Detail expenses={expenses} setExpenses={setExpenses} />}
         />
+        <Route path="/signIn" element={<SignIn />} />
+        <Route path="/signUp" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );
