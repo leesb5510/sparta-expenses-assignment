@@ -1,17 +1,32 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
+import { postExpense } from "../library/api/expense";
+import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
-const WriteForm = ({ month, expenses, setExpenses }) => {
+const WriteForm = ({ user, month }) => {
   // 여기서 하는지?
   // 여기에 저장하고 싶은 데이터도 있고
   // 여기에 클릭할때 실행시킬 버튼 위치가 있으니까요
   // 우선 내가 해야하는거 1번
   // 저장버튼에 onClick 붙이기
-  const [newDate, setNewDate] = useState(""); //`2024-${String(month).padStart(2, "0")}-01`
+  const [newDate, setNewDate] = useState(
+    `2024-${String(month).padStart(2, "0")}-01`
+  );
   const [newItem, setNewItem] = useState("");
   const [newAmount, setNewAmount] = useState("");
   const [newDescription, setNewDescription] = useState("");
+  const queryClient = new QueryClient();
+  const navigate = useNavigate();
+
+  const mutation = useMutation({
+    mutationFn: postExpense,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["expenses"]);
+      navigate(0);
+    },
+  });
 
   const handleAddExpense = () => {
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
@@ -33,9 +48,11 @@ const WriteForm = ({ month, expenses, setExpenses }) => {
       item: newItem,
       amount: parsedAmount,
       description: newDescription,
+      createdBy: user.userId,
     };
 
-    setExpenses([...expenses, newExpense]);
+    mutation.mutate(newExpense);
+
     setNewDate("");
     setNewItem("");
     setNewAmount("");

@@ -1,14 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { login } from "../../library/api/auth";
 
-const SignIn = () => {
+const SignIn = ({ setUser }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSignIn = () => {
-    console.log("아직 구현 안함.", id, password);
+  const handleSignIn = async () => {
+    const { userId, nickname, avatar } = await login({
+      id: id,
+      password: password,
+    });
+
+    setUser({ userId, nickname, avatar });
+    navigate("/");
   };
 
   return (
@@ -36,7 +43,7 @@ const SignIn = () => {
         </InputGroup>
         <Button onClick={handleSignIn}>로그인</Button>
         <ToggleButton
-          onClick={(e) => {
+          onClick={() => {
             navigate("/SignUp");
           }}
         >

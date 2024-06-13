@@ -66,7 +66,7 @@ const SignUp = () => {
         </InputGroup>
         <Button onClick={handleRegister}>회원가입</Button>
         <ToggleButton
-          onClick={(e) => {
+          onClick={() => {
             navigate("/SignIn");
           }}
         >

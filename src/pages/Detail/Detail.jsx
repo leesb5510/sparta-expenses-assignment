@@ -1,37 +1,79 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  getExpenses,
+  putExpense,
+  deleteExpense,
+} from "../../library/api/expense";
 
-const Detail = ({ expenses, setExpenses }) => {
+const Detail = () => {
   const navigate = useNavigate();
-  const params = useParams();
-  const expense = expenses.find((expense) => expense.id === params.id) || {};
-  const [date, setDate] = useState(expense.date);
-  const [item, setItem] = useState(expense.item);
-  const [amount, setAmount] = useState(expense.amount);
-  const [description, setDescription] = useState(expense.description);
+  const { id } = useParams();
+
+  const {
+    data: selectedExpenses,
+    isLoading,
+    error,
+  } = useQuery({ queryKey: ["expense", id], queryFn: getExpenses });
+
+  const [date, setDate] = useState("");
+  const [item, setItem] = useState("");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (selectedExpenses) {
+      setDate(selectedExpenses.date);
+      setItem(selectedExpenses.item);
+      setAmount(selectedExpenses.amount);
+      setDescription(selectedExpenses.description);
+    }
+  }, [selectedExpenses]);
+
+  const mutationEdit = useMutation({
+    mutationFn: putExpense,
+    onSuccess: () => {
+      navigate("/");
+      QueryClient.invalidateQueries(["expenses"]);
+    },
+  });
+
+  const mutationDelete = useMutation({
+    mutationFn: deleteExpense,
+    onSuccess: () => {
+      navigate("/");
+      QueryClient.invalidateQueries(["expenses"]);
+    },
+  });
 
   const handleEdit = () => {
-    setExpenses(
-      expenses.map((data) => {
-        return data.id === expense.id
-          ? { ...data, date, item, amount, description }
-          : data;
-      })
-    );
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if (!datePattern.test(date)) {
+      alert("날짜를 YYYY-MM-DD 형식으로 입력해주세요.");
+      return;
+    }
+    if (!item || amount <= 0) {
+      alert("유효한 항목과 금액을 입력해주세요.");
+      return;
+    }
+
+    const newExpenses = {
+      id: id,
+      date: date,
+      item: item,
+      amount: parseInt(amount, 10),
+      description: description,
+    };
+    mutationEdit.mutate(newExpenses);
+    navigate("/");
   };
 
-  const handleDelete = (expenseId) => {
-    navigate(-1);
-    setExpenses(
-      expenses.filter((data) => {
-        return data.id !== expenseId;
-      })
-    );
+  const handleDelete = () => {
+    mutationDelete.mutate(id);
   };
-
-  console.log(expense);
 
   return (
     <Root>
@@ -78,15 +120,13 @@ const Detail = ({ expenses, setExpenses }) => {
         </InputCard>
         <BtnHolder>
           <Button1 onClick={handleEdit}>수정</Button1>
-          <Button2 onClick={() => handleDelete(expense.id)}>삭제</Button2>
+          <Button2 onClick={handleDelete}>삭제</Button2>
           <Button3 onClick={() => navigate(-1)}>뒤로가기</Button3>
         </BtnHolder>
       </InputHolder>
     </Root>
   );
 };
-
-export default Detail;
 
 const Root = styled.div`
   max-width: 1280px;
@@ -157,3 +197,5 @@ const Button3 = styled.button`
   cursor: pointer;
   transition: background-color 0.2s ease-in-out 0s;
 `;
+
+export default Detail;

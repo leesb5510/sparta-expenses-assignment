@@ -4,30 +4,21 @@ import MonthFilterForm from "../../components/MonthFilterForm";
 import PostList from "../../components/PostList";
 import WriteForm from "../../components/WriteForm";
 
-const Home = ({ expenses, setExpenses }) => {
+const Home = ({ user }) => {
   const [month, setMonth] = useState(0);
 
   console.log(month);
-  console.log("expenses:", expenses);
-
-  const filteredExpenses = expenses.filter(
-    (expense) => expense.month === month
-  );
 
   return (
     <Main>
       <Section>
-        <WriteForm
-          month={month}
-          expenses={expenses}
-          setExpenses={setExpenses}
-        />
+        <WriteForm user={user} month={month} />
       </Section>
       <Section>
         <MonthFilterForm month={month} setMonth={setMonth} />
       </Section>
       <Section>
-        <PostList expenses={filteredExpenses} />
+        <PostList />
       </Section>
     </Main>
   );

@@ -2,9 +2,22 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Section } from "./../pages/Home/Home";
+import { useQuery } from "@tanstack/react-query";
+import { getExpenses } from "../library/api/expense";
 
-const PostList = ({ expenses }) => {
+const PostList = () => {
   const navigate = useNavigate();
+
+  const {
+    data: expenses = [],
+    isLoading,
+    error,
+  } = useQuery({ query: ["expense"], queryFn: getExpenses });
+
+  if (isLoading) {
+    return <div>로딩중 입니다.</div>;
+  }
+  console.log(error);
 
   return (
     <Section>
