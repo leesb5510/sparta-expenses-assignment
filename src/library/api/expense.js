@@ -39,11 +39,13 @@ export const postExpense = async (newExpense) => {
 
 export const putExpense = async (updatedExpense) => {
   const { id, ...rest } = updatedExpense;
+  console.log(updatedExpense);
   try {
     const { data } = await axios.put(
       `${JSON_SERVER_HOST}/expenses/${id}`,
       rest
     );
+    console.log(data);
     return data;
   } catch (error) {
     console.log(error);

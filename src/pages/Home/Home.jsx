@@ -18,7 +18,7 @@ const Home = ({ user }) => {
         <MonthFilterForm month={month} setMonth={setMonth} />
       </Section>
       <Section>
-        <PostList />
+        <PostList month={month} />
       </Section>
     </Main>
   );

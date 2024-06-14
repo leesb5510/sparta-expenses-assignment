@@ -4,20 +4,19 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import {
-  getExpenses,
   putExpense,
   deleteExpense,
+  getExpense,
 } from "../../library/api/expense";
 
 const Detail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const {
-    data: selectedExpenses,
-    isLoading,
-    error,
-  } = useQuery({ queryKey: ["expense", id], queryFn: getExpenses });
+  const { data: selectedExpense } = useQuery({
+    queryKey: ["expenses", id],
+    queryFn: getExpense,
+  });
 
   const [date, setDate] = useState("");
   const [item, setItem] = useState("");
@@ -25,19 +24,19 @@ const Detail = () => {
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    if (selectedExpenses) {
-      setDate(selectedExpenses.date);
-      setItem(selectedExpenses.item);
-      setAmount(selectedExpenses.amount);
-      setDescription(selectedExpenses.description);
+    if (selectedExpense) {
+      setDate(selectedExpense.date);
+      setItem(selectedExpense.item);
+      setAmount(selectedExpense.amount);
+      setDescription(selectedExpense.description);
     }
-  }, [selectedExpenses]);
-
+  }, [selectedExpense]);
+  const queryClient = new QueryClient();
   const mutationEdit = useMutation({
     mutationFn: putExpense,
     onSuccess: () => {
       navigate("/");
-      QueryClient.invalidateQueries(["expenses"]);
+      queryClient.invalidateQueries(["expenses"]);
     },
   });
 
@@ -45,7 +44,7 @@ const Detail = () => {
     mutationFn: deleteExpense,
     onSuccess: () => {
       navigate("/");
-      QueryClient.invalidateQueries(["expenses"]);
+      queryClient.invalidateQueries(["expenses"]);
     },
   });
 
@@ -86,7 +85,7 @@ const Detail = () => {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             placeholder="YYYY-MM-DD"
-          ></Input>
+          />
         </InputCard>
         <InputCard>
           <Label htmlFor="item">항목</Label>
@@ -96,7 +95,7 @@ const Detail = () => {
             value={item}
             onChange={(e) => setItem(e.target.value)}
             placeholder="지출 항목"
-          ></Input>
+          />
         </InputCard>
         <InputCard>
           <Label htmlFor="amount">금액</Label>
@@ -116,7 +115,7 @@ const Detail = () => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="지출 내용"
-          ></Input>
+          />
         </InputCard>
         <BtnHolder>
           <Button1 onClick={handleEdit}>수정</Button1>

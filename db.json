@@ -1,26 +1,6 @@
 {
   "expenses": [
     {
-      "id": "46869445-5f9c-4650-941f-41bd9457bc07",
-      "month": 1,
-      "date": "2024-01-03",
-      "item": "개인사업",
-      "amount": 1000000,
-      "description": "테슬라 모델 3",
-      "createdBy": "Musk",
-      "userId": "41bd9457bc07-5f9c-4650-941f"
-    },
-    {
-      "id": "a5c0d8de-d010-4d07-9934-29765051a7ea",
-      "month": 1,
-      "date": "2024-01-07",
-      "item": "개인사업",
-      "amount": 1000,
-      "description": "X(구 트위터)",
-      "createdBy": "Musk",
-      "userId": "41b13327bc07-5f9c-4650-941f"
-    },
-    {
       "id": "0d0a966e-5c35-4bf0-aca4-f2b1265a432d",
       "month": 1,
       "date": "2024-01-13",
@@ -69,6 +49,24 @@
       "description": "세광양대창",
       "createdBy": "Me",
       "userId": "4111207-5f9c-4e20-912f"
+    },
+    {
+      "id": "23321356-13ed-492f-bb46-84679f60e58e",
+      "month": 3,
+      "date": "2024-03-01",
+      "item": "항목1",
+      "amount": 10000,
+      "description": "내용1",
+      "createdBy": "test-0004"
+    },
+    {
+      "id": "0edc8651-85d2-4c44-9c23-dbfae07a1e62",
+      "month": 2,
+      "date": "2024-02-01",
+      "item": "개인사업1",
+      "amount": 500000,
+      "description": "개인사업1",
+      "createdBy": "test-0004"
     }
   ]
 }

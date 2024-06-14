@@ -1,19 +1,6 @@
 import styled from "styled-components";
 import { Section } from "./../pages/Home/Home";
 
-/* Button list 대신에 map 사용하기
-const MONTHS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-
-return 의 <Wrapper></Wrapper>태그를 만들고 안에, {MONTH.map((month) => {
-  return <button key={month}>{`${month}월`}</button>  를 배치한다. Wrapper의 style은
-  div 태그로서 display: flex; flex-wrap: wrap;
-  gap: 20px; justify-content: center;
-  가 들어간다.
-
-map을 쓸 때는 각각의 child가 고유한 키값을 가지고 있어야 하기 때문에 button에 id를 입력한다.
-month가 겹칠 일이 없기 때문에 month를 입력했다.
-*/
-
 const MONTHS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const MonthFilterForm = ({ month, setMonth }) => {
